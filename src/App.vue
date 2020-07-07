@@ -1,39 +1,20 @@
 <template>
   <div id="app">
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top nav-custom">
+    <b-navbar toggleable="lg" class="nav-custom">
       <div class="container">
-        <a href="/" class="navbar-brand">TMS 2.0</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-              <router-link tag="a" class="nav-link" to="/">ホーム</router-link>
-            </li>
-            <li class="nav-item">
-              <router-link tag="a" class="nav-link" to="/projects">プロジェクト</router-link>
-            </li>
-            <li class="nav-item">
-              <router-link tag="a" class="nav-link" to="/groups">グループ</router-link>
-            </li>
-            <li class="nav-item">
-              <router-link tag="a" class="nav-link" to="/help">使い方</router-link>
-            </li>
-          </ul>
-        </div>
+        <b-navbar-brand href="/">TMS 2.0</b-navbar-brand>
+        <b-navbar-toggle target="nav-collapse" />
+        <b-collapse id="nav-collapse" is-nav>
+          <b-navbar-nav>
+            <router-link tag="b-nav-item" to="/">ホーム</router-link>
+            <router-link tag="b-nav-item" to="/projcets">プロジェクト</router-link>
+            <router-link tag="b-nav-item" to="/groups">グループ</router-link>
+            <router-link tag="b-nav-item" to="/help">使い方</router-link>
+          </b-navbar-nav>
+          <b-navbar-nav class="ml-auto"></b-navbar-nav>
+        </b-collapse>
       </div>
-    </nav>
-    <br />
-    <br />
+    </b-navbar>
     <router-view />
   </div>
 </template>

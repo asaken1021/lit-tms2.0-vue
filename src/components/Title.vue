@@ -1,5 +1,5 @@
 <template>
-  <div class="title-component">
+  <div class="component-title">
     <div class="project-title">
       <h2>{{ title }}</h2>
     </div>
@@ -19,7 +19,7 @@ export default {
 .project-title {
   border-bottom: solid black 2px;
 }
-.title-component {
+.component-title {
   padding-top: 40px;
 }
 </style>

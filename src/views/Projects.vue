@@ -1,5 +1,5 @@
 <template>
-  <div class="container projects">
+  <div class="container view-projects">
     <Title title="プロジェクト一覧" />
     <MainMenu />
   </div>
