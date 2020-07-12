@@ -1,21 +1,31 @@
 <template>
   <div class="component-modals">
     <b-modal id="modal-sign_up" title="新規ユーザー登録" size="lg" centered>
-      <b-form-input type="text" name="name" placeholder="表示名(ニックネーム)" />
-      <b-form-input type="email" name="mail" placeholder="メールアドレス" />
-      <b-form-input type="password" name="password" placeholder="パスワード(8文字以上24文字以内)" />
-      <b-form-input type="password" name="password_confirmation" placeholder="パスワード(確認)" />
+      <b-form-input v-model="name" type="text" name="name" placeholder="表示名(ニックネーム)" />
+      <b-form-input v-model="mail" type="email" name="mail" placeholder="メールアドレス" />
+      <b-form-input
+        v-model="password"
+        type="password"
+        name="password"
+        placeholder="パスワード(8文字以上24文字以内)"
+      />
+      <b-form-input
+        v-model="password_confirmation"
+        type="password"
+        name="password_confirmation"
+        placeholder="パスワード(確認)"
+      />
       <template v-slot:modal-footer>
         <b-button variant="secondary" @click="$bvModal.hide('modal-sign_up')">キャンセル</b-button>
-        <b-button variant="primary">登録</b-button>
+        <b-button v-on:click="post_sign_up" variant="primary">登録</b-button>
       </template>
     </b-modal>
     <b-modal id="modal-sign_in" title="サインイン" size="lg" centered>
-      <b-form-input type="email" name="mail" placeholder="メールアドレス" />
-      <b-form-input type="password" name="password" placeholder="パスワード" />
+      <b-form-input v-model="mail" type="email" name="mail" placeholder="メールアドレス" />
+      <b-form-input v-model="password" type="password" name="password" placeholder="パスワード" />
       <template v-slot:modal-footer>
         <b-button variant="secondary" @click="$bvModal.hide('modal-sign_in')">キャンセル</b-button>
-        <b-button variant="primary">サインイン</b-button>
+        <b-button v-on:click="post_sign_in" variant="primary">サインイン</b-button>
       </template>
     </b-modal>
     <b-modal id="modal-sign_out" title="サインアウト" size="lg" centered>
@@ -87,3 +97,63 @@
     </b-modal>
   </div>
 </template>
+
+<script>
+import axios from "axios";
+
+export default {
+  data() {
+    return {
+      mail: "",
+      name: "",
+      password: "",
+      password_confirmation: ""
+    };
+  },
+  methods: {
+    post_sign_up: function() {
+      axios
+        .post("http://localhost:4567/api/v1", {
+          type: "sign_up",
+          mail: this.mail,
+          name: this.name,
+          password: this.password,
+          password_confirmation: this.password_confirmation
+        })
+        .then(function(response) {
+          console.log(response);
+          const res = JSON.parse(response.data);
+          if (res.response == "OK") {
+            console.log("OK");
+          } else if (res.response == "Bad Request") {
+            console.log("Bad Request Reason: " + res.reason);
+          }
+        });
+    },
+    post_sign_in: function() {
+      axios
+        .post("http://localhost:4567/api/v1", {
+          type: "sign_in",
+          mail: this.mail,
+          password: this.password
+        })
+        .then(function(response) {
+          console.log(response);
+          const res = JSON.parse(response.data);
+          if (res.response == "OK") {
+            console.log("OK");
+            this.$store.commit("setUser", {
+              id: res.id,
+              mail: res.mail,
+              name: res.name,
+              lineid: res.lineid
+            });
+          } else if (res.response == "Bad Request") {
+            console.log("Bad Request");
+          }
+          // const res = JSON.parse(response.data);
+        });
+    }
+  }
+};
+</script>

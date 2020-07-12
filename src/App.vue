@@ -11,7 +11,11 @@
             <router-link tag="b-nav-item" to="/groups">グループ</router-link>
             <router-link tag="b-nav-item" to="/help">使い方</router-link>
           </b-navbar-nav>
-          <b-navbar-nav class="ml-auto"></b-navbar-nav>
+          <b-navbar-nav class="ml-auto">
+            <b-button variant="danger" class="margin-right-5px">テスト</b-button>
+            <b-button variant="primary" class="margin-right-5px" v-b-modal.modal-sign_up>新規登録</b-button>
+            <b-button variant="primary" v-b-modal.modal-sign_in>サインイン</b-button>
+          </b-navbar-nav>
         </b-collapse>
       </div>
     </b-navbar>
@@ -19,8 +23,22 @@
   </div>
 </template>
 
-<style>
+<script>
+export default {
+  name: "App",
+  computed: {
+    getUserName() {
+      return this.$store.getters.getUser.name;
+    }
+  }
+};
+</script>
+
+<style scoped>
 .nav-custom {
   background-color: #87cefa;
+}
+.margin-right-5px {
+  margin-right: 5px;
 }
 </style>
