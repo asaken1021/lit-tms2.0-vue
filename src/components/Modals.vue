@@ -31,8 +31,8 @@
     <b-modal id="modal-sign_out" title="サインアウト" size="lg" centered>
       <p>本当にサインアウトしますか？</p>
       <template v-slot:modal-footer>
-        <b-form-button variant="secondary" @click="$bvModal.hide('modal-sign_out')">キャンセル</b-form-button>
-        <b-form-button variant="primary">サインアウト</b-form-button>
+        <b-button variant="secondary" @click="$bvModal.hide('modal-sign_out')">キャンセル</b-button>
+        <b-button v-on:click="post_sign_out" variant="primary">サインアウト</b-button>
       </template>
     </b-modal>
     <b-modal id="modal-create_group" title="新規グループ作成" size="lg" centered>
@@ -120,11 +120,20 @@ export default {
           password: this.password,
           password_confirmation: this.password_confirmation
         })
-        .then(function(response) {
+        .then(response => {
           console.log(response);
           const res = JSON.parse(response.data);
           if (res.response == "OK") {
             console.log("OK");
+            this.$store.commit("setUser", {
+              user: {
+                id: res.id,
+                mail: res.mail,
+                name: res.name,
+                lineid: res.lineid
+              }
+            });
+            this.$bvModal.hide("modal-sign_up");
           } else if (res.response == "Bad Request") {
             console.log("Bad Request Reason: " + res.reason);
           }
@@ -137,21 +146,41 @@ export default {
           mail: this.mail,
           password: this.password
         })
-        .then(function(response) {
+        .then(response => {
           console.log(response);
           const res = JSON.parse(response.data);
           if (res.response == "OK") {
             console.log("OK");
             this.$store.commit("setUser", {
-              id: res.id,
-              mail: res.mail,
-              name: res.name,
-              lineid: res.lineid
+              user: {
+                id: res.id,
+                mail: res.mail,
+                name: res.name,
+                lineid: res.lineid
+              }
             });
+            this.$bvModal.hide("modal-sign_in");
           } else if (res.response == "Bad Request") {
             console.log("Bad Request");
           }
-          // const res = JSON.parse(response.data);
+        });
+    },
+    post_sign_out: function() {
+      axios
+        .post("http://localhost:4567/api/v1", {
+          type: "sign_out"
+        })
+        .then(response => {
+          console.log(response);
+          this.$store.commit("setUser", {
+            user: {
+              id: -1,
+              mail: "",
+              name: "",
+              lineid: ""
+            }
+          });
+          this.$bvModal.hide("modal-sign_out");
         });
     }
   }

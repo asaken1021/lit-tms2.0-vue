@@ -12,9 +12,23 @@
             <router-link tag="b-nav-item" to="/help">使い方</router-link>
           </b-navbar-nav>
           <b-navbar-nav class="ml-auto">
-            <b-button variant="danger" class="margin-right-5px">テスト</b-button>
-            <b-button variant="primary" class="margin-right-5px" v-b-modal.modal-sign_up>新規登録</b-button>
-            <b-button variant="primary" v-b-modal.modal-sign_in>サインイン</b-button>
+            <div v-if="getUserName != ''">
+              <span class="navbar-text margin-right-5px">
+                ようこそ,
+                <router-link tag="a" to="/">{{ getUserName }}</router-link>
+                {{ ' ' }}さん
+              </span>
+              <router-link
+                tag="a"
+                class="btn btn-primary btn-custom margin-right-5px"
+                to="/user_settings"
+              >ユーザー設定</router-link>
+              <b-button variant="primary" class="btn-custom" v-b-modal.modal-sign_out>サインアウト</b-button>
+            </div>
+            <div v-else>
+              <b-button variant="primary" class="margin-right-5px" v-b-modal.modal-sign_up>新規登録</b-button>
+              <b-button variant="primary" v-b-modal.modal-sign_in>サインイン</b-button>
+            </div>
           </b-navbar-nav>
         </b-collapse>
       </div>
@@ -40,5 +54,8 @@ export default {
 }
 .margin-right-5px {
   margin-right: 5px;
+}
+.btn-custom {
+  vertical-align: unset;
 }
 </style>
