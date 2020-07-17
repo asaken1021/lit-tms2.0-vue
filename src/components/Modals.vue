@@ -102,6 +102,7 @@
 import axios from "axios";
 
 export default {
+  name: "Modals",
   data() {
     return {
       mail: "",
@@ -124,7 +125,6 @@ export default {
           console.log(response);
           const res = JSON.parse(response.data);
           if (res.response == "OK") {
-            console.log("OK");
             this.$store.commit("setUser", {
               user: {
                 id: res.id,
@@ -150,7 +150,6 @@ export default {
           console.log(response);
           const res = JSON.parse(response.data);
           if (res.response == "OK") {
-            console.log("OK");
             this.$store.commit("setUser", {
               user: {
                 id: res.id,

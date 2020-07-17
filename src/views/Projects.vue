@@ -1,19 +1,22 @@
 <template>
   <div class="container view-projects">
     <Title title="プロジェクト一覧" />
-    <MainMenu />
+    <ProjectsList />
+    <Modals />
   </div>
 </template>
 
 <script>
-// import ProjectList from "@/components/ProjectList.vue";
+import ProjectsList from "@/components/ProjectsList.vue";
 import Title from "@/components/Title.vue";
+import Modals from "@/components/Modals.vue";
 
 export default {
   name: "ProjectsPage",
   components: {
-    // ProjectList,
-    Title
+    ProjectsList,
+    Title,
+    Modals
   }
 };
 </script>

@@ -19,13 +19,7 @@
 </template>
 
 <script>
-// import Modals from "@/components/Modals.vue";
-
 export default {
-  // components: {
-  //   Modals
-  // },
-  name: "MainMenu",
-  props: {}
+  name: "MainMenu"
 };
 </script>

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Main from '../views/Main.vue'
 import Projects from '../views/Projects.vue'
+import Project from '../views/Project.vue'
 import BootstrapVue from 'bootstrap-vue'
 
 Vue.use(VueRouter)
@@ -20,6 +21,11 @@ const routes = [
     path: '/projects',
     name: 'Projects',
     component: Projects
+  },
+  {
+    path: '/project/:id',
+    name: 'Project',
+    component: Project
   }
 ]
 

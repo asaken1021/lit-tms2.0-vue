@@ -1,7 +1,9 @@
 <template>
   <div class="component-title">
-    <div class="project-title">
-      <h2>{{ title }}</h2>
+    <div class="title">
+      <div class="container">
+        <h2 class="title-text">{{ title }}</h2>
+      </div>
     </div>
   </div>
 </template>
@@ -16,10 +18,13 @@ export default {
 </script>
 
 <style scoped>
-.project-title {
+.title {
   border-bottom: solid black 2px;
 }
 .component-title {
   padding-top: 40px;
+}
+.title-text {
+  font-size: 40px;
 }
 </style>

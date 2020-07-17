@@ -7,15 +7,15 @@
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav>
             <router-link tag="b-nav-item" to="/">ホーム</router-link>
-            <router-link tag="b-nav-item" to="/projcets">プロジェクト</router-link>
+            <router-link tag="b-nav-item" to="/projects">プロジェクト</router-link>
             <router-link tag="b-nav-item" to="/groups">グループ</router-link>
             <router-link tag="b-nav-item" to="/help">使い方</router-link>
           </b-navbar-nav>
           <b-navbar-nav class="ml-auto">
-            <div v-if="getUserName != ''">
+            <div v-if="getUserInfo.name != ''">
               <span class="navbar-text margin-right-5px">
                 ようこそ,
-                <router-link tag="a" to="/">{{ getUserName }}</router-link>
+                <router-link tag="a" to="/">{{ getUserInfo.name }}</router-link>
                 {{ ' ' }}さん
               </span>
               <router-link
@@ -41,8 +41,8 @@
 export default {
   name: "App",
   computed: {
-    getUserName() {
-      return this.$store.getters.getUser.name;
+    getUserInfo() {
+      return this.$store.getters.getUser;
     }
   }
 };
