@@ -1,7 +1,6 @@
 <template>
   <div class="component-mainmenu">
     <div class="container">
-      <br />
       <b-card title="使い方" class="text-center">
         <b-card-text>初めてTMS 2.0を使う方はこちら</b-card-text>
         <router-link tag="a" class="btn btn-primary" to="/help">使い方</router-link>
@@ -23,3 +22,9 @@ export default {
   name: "MainMenu"
 };
 </script>
+
+<style scoped>
+.container {
+  margin-top: 20px;
+}
+</style>

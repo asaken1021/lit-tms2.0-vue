@@ -1,7 +1,7 @@
 <template>
   <div class="component-projectslist">
     <div class="container">
-      <b-card class="text-center" v-for="project in projects" :key="project.id">
+      <b-card class="text-center" v-for="project in projects" v-bind:key="project.id">
         <b-card-body>
           <router-link tag="a" :to="`/project/${project.id}`">
             <h4>{{project.name}}</h4>
@@ -43,3 +43,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.container {
+  margin-top: 20px;
+}
+</style>
