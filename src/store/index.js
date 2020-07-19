@@ -22,6 +22,9 @@ const store = new Vuex.Store({
       task_id: -1,
       task_name: "",
       task_progress: 0
+    },
+    phaseReloadHook: {
+      hook: false
     }
   },
   getters: {
@@ -36,6 +39,9 @@ const store = new Vuex.Store({
     },
     getSelectedTask(state) {
       return state.selectedTask;
+    },
+    getPhaseReloadHook(state) {
+      return state.phaseReloadHook;
     }
   },
   mutations: {
@@ -50,6 +56,10 @@ const store = new Vuex.Store({
     },
     setSelectedTask(state, payload) {
       state.selectedTask = payload.selectedTask;
+    },
+    setPhaseReloadHook(state, payload) {
+      state.phaseReloadHook = payload.phaseReloadHook;
+      console.log("PhaseReloadHook called");
     }
   }
 })

@@ -6,12 +6,17 @@
       head-variant="light"
       selectable
       select-mode="single"
+      class="margin-bottom-20px"
       v-if="isShow"
       v-bind:items="phases"
       v-bind:fields="fields"
       v-on:row-selected="onPhaseSelected"
     ></b-table>
-    <b-button variant="primary" v-on:click="$bvModal.show('modal-create_phase')">新規フェーズ作成</b-button>
+    <b-button
+      variant="primary"
+      v-on:click="$bvModal.show('modal-create_phase')"
+      v-if="isShowButton"
+    >新規フェーズ作成</b-button>
   </div>
 </template>
 
@@ -36,11 +41,23 @@ export default {
           }
         }
       ],
-      isShow: false
+      isShow: false,
+      isShowButton: false
     };
   },
   mounted() {
     this.$nextTick(function() {
+      this.phaseLoad();
+    });
+
+    this.$store.subscribe(mutation => {
+      if (mutation.type == "setPhaseReloadHook") {
+        this.phaseLoad();
+      }
+    });
+  },
+  methods: {
+    phaseLoad: function() {
       axios
         .post("http://localhost:4567/api/v1", {
           type: "get_project_info",
@@ -64,14 +81,16 @@ export default {
             }
 
             this.isShow = true;
+
+            if (this.$store.getters.getUser.id == res.project.user_id) {
+              this.isShowButton = true;
+            }
           } else if (res.response == "Bad Request") {
             console.log("Bad Request");
             this.isShow = false;
           }
         });
-    });
-  },
-  methods: {
+    },
     onPhaseSelected: function(item) {
       if (item[0] != null) {
         this.$store.commit("setSelectedPhase", {
@@ -84,3 +103,9 @@ export default {
   }
 };
 </script>
+
+<style>
+.margin-bottom-20px {
+  margin-bottom: 20px;
+}
+</style>

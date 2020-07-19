@@ -112,3 +112,9 @@ export default {
   }
 };
 </script>
+
+<style>
+.component-taskinfo {
+  margin-top: 20px;
+}
+</style>

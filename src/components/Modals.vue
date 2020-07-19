@@ -226,9 +226,14 @@ export default {
         .then(response => {
           console.log(response);
           const res = JSON.parse(response.data);
-          this.$router.push({
-            path: "/project/" + res.project.id
-          });
+          if (res.response == "OK") {
+            this.$router.push({
+              path: "/project/" + res.project.id
+            });
+            this.$bvModal.hide("modal-create_project");
+          } else if (res.response == "Bad Request") {
+            console.log("Bad Request Reason: " + res.reason);
+          }
         });
     },
     create_phase: function() {
@@ -237,12 +242,23 @@ export default {
           type: "create_phase",
           name: this.phase.name,
           deadline: this.phase.deadline,
-          user_id: this.$store.getters.getUser.id
+          user_id: this.$store.getters.getUser.id,
+          project_id: this.$store.getters.getSelectedProject.project_id
         })
         .then(response => {
           console.log(response);
-          // const res = JSON.parse(response.data);
-          // TODO: フェーズ情報の再取得命令
+          const res = JSON.parse(response.data);
+          if (res.response == "OK") {
+            console.log("debug");
+            this.$store.commit("setPhaseReloadHook", {
+              phaseReloadHook: {
+                hook: !this.$store.getters.getPhaseReloadHook
+              }
+            });
+            this.$bvModal.hide("modal-create_phase");
+          } else if (res.response == "Bad Request") {
+            console.log("Bad Request Reason: " + res.reason);
+          }
         });
     }
   }
