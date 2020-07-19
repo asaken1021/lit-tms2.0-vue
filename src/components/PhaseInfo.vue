@@ -9,8 +9,9 @@
       v-if="isShow"
       v-bind:items="phases"
       v-bind:fields="fields"
-      @row-selected="onPhaseSelected"
+      v-on:row-selected="onPhaseSelected"
     ></b-table>
+    <b-button variant="primary" v-on:click="$bvModal.show('modal-create_phase')">新規フェーズ作成</b-button>
   </div>
 </template>
 
@@ -21,12 +22,7 @@ export default {
   name: "PhaseInfo",
   data() {
     return {
-      phases: [
-        {
-          フェーズ名: "",
-          締め切り日付: ""
-        }
-      ],
+      phases: [],
       fields: [
         {
           key: "name",
@@ -51,33 +47,39 @@ export default {
           project_id: this.$store.getters.getSelectedProject.project_id
         })
         .then(response => {
-          console.log(response);
+          console.log("phase_response", response);
           const res = JSON.parse(response.data);
           if (res.response == "OK") {
-            console.log(res.phases);
+            // console.log(res.phases);
 
             this.phases = res.phases;
+
+            if (this.phases.length == 0) {
+              this.phases = [
+                {
+                  name: "フェーズがありません",
+                  deadline: ""
+                }
+              ];
+            }
 
             this.isShow = true;
           } else if (res.response == "Bad Request") {
             console.log("Bad Request");
-            this.phases = [
-              {
-                エラー: "Bad Request"
-              }
-            ];
-            this.isShow = true;
+            this.isShow = false;
           }
         });
     });
   },
   methods: {
-    onPhaseSelected(item) {
-      this.$store.commit("setSelectedPhase", {
-        selectedPhase: {
-          phase_id: item[0].id
-        }
-      });
+    onPhaseSelected: function(item) {
+      if (item[0] != null) {
+        this.$store.commit("setSelectedPhase", {
+          selectedPhase: {
+            phase_id: item[0].id
+          }
+        });
+      }
     }
   }
 };

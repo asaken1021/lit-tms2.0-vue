@@ -12,13 +12,16 @@ const store = new Vuex.Store({
       lineid: ""
     },
     selectedProject: {
-      project_id: -1
+      project_id: -1,
+      project_user_id: -1
     },
     selectedPhase: {
       phase_id: -1
     },
     selectedTask: {
-      task_id: -1
+      task_id: -1,
+      task_name: "",
+      task_progress: 0
     }
   },
   getters: {
@@ -46,7 +49,7 @@ const store = new Vuex.Store({
       state.selectedPhase = payload.selectedPhase;
     },
     setSelectedTask(state, payload) {
-      state.selectedTask = payload.setSelectedTask;
+      state.selectedTask = payload.selectedTask;
     }
   }
 })

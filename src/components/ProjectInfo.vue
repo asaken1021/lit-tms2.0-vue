@@ -57,20 +57,17 @@ export default {
           project_id: this.$store.getters.getSelectedProject.project_id
         })
         .then(response => {
-          console.log(response);
+          console.log("project_response", response);
           const res = JSON.parse(response.data);
           if (res.response == "OK") {
             this.project = res.project;
-            // this.project.phases = res.phases;
 
-            // for (let x = 0; x < this.project.phases.length; x++) {
-            //   let phase_tasks = res.tasks.filter(item => {
-            //     if (item.phase_id == x + 1) {
-            //       return true;
-            //     }
-            //   });
-            //   this.project.phases[x].tasks = phase_tasks;
-            // }
+            this.$store.commit("setSelectedProject", {
+              selectedProject: {
+                project_id: this.$store.getters.getSelectedProject.project_id,
+                project_user_id: this.project.user_id
+              }
+            });
 
             this.handler.$emit("init", this.chart_options);
 
@@ -97,7 +94,7 @@ export default {
 </script>
 
 <style scoped>
-.container {
+/* .container {
   margin-top: 20px;
-}
+} */
 </style>

@@ -4,8 +4,14 @@
       <b-card class="text-center" v-for="project in projects" v-bind:key="project.id">
         <b-card-body>
           <router-link tag="a" :to="`/project/${project.id}`">
-            <h4>{{project.name}}</h4>
+            <h4>{{ project.name }}</h4>
           </router-link>
+        </b-card-body>
+      </b-card>
+      <b-card class="text-center" v-if="showError">
+        <b-card-body>
+          <h3 class="text-danger text-underlined">{{ errorTitle }}</h3>
+          <h4 class="text-danger">{{ errorMessage }}</h4>
         </b-card-body>
       </b-card>
     </div>
@@ -19,7 +25,10 @@ export default {
   name: "ProjectsList",
   data() {
     return {
-      projects: []
+      projects: [],
+      errorTitle: "",
+      errorMessage: "",
+      showError: false
     };
   },
   mounted() {
@@ -37,6 +46,12 @@ export default {
             this.projects = res.projects;
           } else if (res.response == "Bad Request") {
             console.log("Bad Request Reason: " + res.reason);
+            if (res.reason == "USER_NOT_FOUND") {
+              this.errorTitle = "ユーザー情報がありません";
+              this.errorMessage =
+                "サインインしていないため、プロジェクト一覧を表示できません。表示するにはサインインしてください。";
+              this.showError = true;
+            }
           }
         });
     });
@@ -47,5 +62,8 @@ export default {
 <style scoped>
 .container {
   margin-top: 20px;
+}
+.text-underlined {
+  text-decoration: underline;
 }
 </style>
