@@ -93,7 +93,7 @@
       </template>
     </b-modal>
     <b-modal
-      id="modal-edit_task_progress"
+      id="modal-change_task_progress"
       body-class="text-centered"
       v-bind:title="'タスクの進捗度編集: ' + task.name "
       size="lg"
@@ -102,8 +102,8 @@
       <b-form-input type="range" name="progress" min="0" max="100" v-model="task.progress" />
       <span>{{ task.progress }}%</span>
       <template v-slot:modal-footer>
-        <b-button variant="secondary" v-on:click="$bvModal.hide('modal-edit_task_progress')">キャンセル</b-button>
-        <b-button variant="primary">保存</b-button>
+        <b-button variant="secondary" v-on:click="$bvModal.hide('modal-change_task_progress')">キャンセル</b-button>
+        <b-button variant="primary" v-on:click="change_task_progress">保存</b-button>
       </template>
     </b-modal>
   </div>
@@ -120,20 +120,20 @@ export default {
         mail: "",
         name: "",
         password: "",
-        password_confirmation: ""
+        password_confirmation: "",
       },
       project: {
-        name: ""
+        name: "",
       },
       phase: {
         name: "",
-        deadline: ""
+        deadline: "",
       },
       task: {
         id: -1,
         name: "",
-        progress: 0
-      }
+        progress: 0,
+      },
     };
   },
   mounted() {
@@ -146,16 +146,16 @@ export default {
     });
   },
   methods: {
-    sign_up: function() {
+    sign_up: function () {
       axios
         .post("http://localhost:4567/api/v1", {
           type: "sign_up",
           mail: this.user.mail,
           name: this.user.name,
           password: this.user.password,
-          password_confirmation: this.user.password_confirmation
+          password_confirmation: this.user.password_confirmation,
         })
-        .then(response => {
+        .then((response) => {
           console.log(response);
           const res = JSON.parse(response.data);
           if (res.response == "OK") {
@@ -164,8 +164,8 @@ export default {
                 id: res.id,
                 mail: res.mail,
                 name: res.name,
-                lineid: res.lineid
-              }
+                lineid: res.lineid,
+              },
             });
             this.$bvModal.hide("modal-sign_up");
           } else if (res.response == "Bad Request") {
@@ -173,14 +173,14 @@ export default {
           }
         });
     },
-    sign_in: function() {
+    sign_in: function () {
       axios
         .post("http://localhost:4567/api/v1", {
           type: "sign_in",
           mail: this.user.mail,
-          password: this.user.password
+          password: this.user.password,
         })
-        .then(response => {
+        .then((response) => {
           console.log(response);
           const res = JSON.parse(response.data);
           if (res.response == "OK") {
@@ -189,8 +189,8 @@ export default {
                 id: res.id,
                 mail: res.mail,
                 name: res.name,
-                lineid: res.lineid
-              }
+                lineid: res.lineid,
+              },
             });
             this.$bvModal.hide("modal-sign_in");
           } else if (res.response == "Bad Request") {
@@ -198,37 +198,37 @@ export default {
           }
         });
     },
-    sign_out: function() {
+    sign_out: function () {
       axios
         .post("http://localhost:4567/api/v1", {
-          type: "sign_out"
+          type: "sign_out",
         })
-        .then(response => {
+        .then((response) => {
           console.log(response);
           this.$store.commit("setUser", {
             user: {
               id: -1,
               mail: "",
               name: "",
-              lineid: ""
-            }
+              lineid: "",
+            },
           });
           this.$bvModal.hide("modal-sign_out");
         });
     },
-    create_project: function() {
+    create_project: function () {
       axios
         .post("http://localhost:4567/api/v1", {
           type: "create_project",
           name: this.project.name,
-          user_id: this.$store.getters.getUser.id
+          user_id: this.$store.getters.getUser.id,
         })
-        .then(response => {
+        .then((response) => {
           console.log(response);
           const res = JSON.parse(response.data);
           if (res.response == "OK") {
             this.$router.push({
-              path: "/project/" + res.project.id
+              path: "/project/" + res.project.id,
             });
             this.$bvModal.hide("modal-create_project");
           } else if (res.response == "Bad Request") {
@@ -236,32 +236,55 @@ export default {
           }
         });
     },
-    create_phase: function() {
+    create_phase: function () {
       axios
         .post("http://localhost:4567/api/v1", {
           type: "create_phase",
           name: this.phase.name,
           deadline: this.phase.deadline,
           user_id: this.$store.getters.getUser.id,
-          project_id: this.$store.getters.getSelectedProject.project_id
+          project_id: this.$store.getters.getSelectedProject.project_id,
         })
-        .then(response => {
+        .then((response) => {
           console.log(response);
           const res = JSON.parse(response.data);
           if (res.response == "OK") {
-            console.log("debug");
+            console.log("phase created");
             this.$store.commit("setPhaseReloadHook", {
               phaseReloadHook: {
-                hook: !this.$store.getters.getPhaseReloadHook
-              }
+                hook: !this.$store.getters.getPhaseReloadHook.hook,
+              },
             });
             this.$bvModal.hide("modal-create_phase");
           } else if (res.response == "Bad Request") {
             console.log("Bad Request Reason: " + res.reason);
           }
         });
-    }
-  }
+    },
+    change_task_progress: function () {
+      axios
+        .post("http://localhost:4567/api/v1", {
+          type: "change_task_progress",
+          user_id: this.$store.getters.getUser.id,
+          task_id: this.$store.getters.getSelectedTask.task_id,
+          task_progress: this.task.progress,
+        })
+        .then((response) => {
+          console.log(response);
+          const res = JSON.parse(response.data);
+          if (res.response == "OK") {
+            this.$store.commit("setTaskUpdateHook", {
+              taskUpdateHook: {
+                hook: !this.$store.getters.getTaskUpdateHook.hook,
+              },
+            });
+            this.$bvModal.hide("modal-change_task_progress");
+          } else if (res.response == "Bad Request") {
+            console.log("Bad Request Reason: " + res.reason);
+          }
+        });
+    },
+  },
 };
 </script>
 

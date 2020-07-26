@@ -13,7 +13,8 @@ const store = new Vuex.Store({
     },
     selectedProject: {
       project_id: -1,
-      project_user_id: -1
+      project_user_id: -1,
+      project_progress: 0.0
     },
     selectedPhase: {
       phase_id: -1
@@ -22,6 +23,9 @@ const store = new Vuex.Store({
       task_id: -1,
       task_name: "",
       task_progress: 0
+    },
+    taskUpdateHook: {
+      hook: false
     },
     phaseReloadHook: {
       hook: false
@@ -40,6 +44,9 @@ const store = new Vuex.Store({
     getSelectedTask(state) {
       return state.selectedTask;
     },
+    getTaskUpdateHook(state) {
+      return state.taskUpdateHook;
+    },
     getPhaseReloadHook(state) {
       return state.phaseReloadHook;
     }
@@ -56,6 +63,10 @@ const store = new Vuex.Store({
     },
     setSelectedTask(state, payload) {
       state.selectedTask = payload.selectedTask;
+    },
+    setTaskUpdateHook(state, payload) {
+      state.taskUpdateHook = payload.taskUpdateHook;
+      console.log("TaskUpdateHook called");
     },
     setPhaseReloadHook(state, payload) {
       state.phaseReloadHook = payload.phaseReloadHook;
