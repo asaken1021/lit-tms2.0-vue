@@ -85,11 +85,11 @@
       </template>
     </b-modal>
     <b-modal id="modal-create_task" title="新規タスク作成" size="lg" centered>
-      <b-form-input type="text" name="task_name" placeholder="タスク名" />
-      <b-form-input type="text" name="task_memo" placeholder="メモ" />
+      <b-form-input v-model="task.name" type="text" name="task_name" placeholder="タスク名" />
+      <b-form-input v-model="task.memo" type="text" name="task_memo" placeholder="メモ" />
       <template v-slot:modal-footer>
         <b-button variant="secondary" v-on:click="$bvModal.hide('modal-create_task')">キャンセル</b-button>
-        <b-button variant="primary">作成</b-button>
+        <b-button variant="primary" v-on:click="create_task">作成</b-button>
       </template>
     </b-modal>
     <b-modal
@@ -132,6 +132,7 @@ export default {
       task: {
         id: -1,
         name: "",
+        memo: "",
         progress: 0,
       },
     };
@@ -256,6 +257,33 @@ export default {
               },
             });
             this.$bvModal.hide("modal-create_phase");
+          } else if (res.response == "Bad Request") {
+            console.log("Bad Request Reason: " + res.reason);
+          }
+        });
+    },
+    create_task: function () {
+      axios
+        .post("http://localhost:4567/api/v1", {
+          type: "create_task",
+          name: this.task.name,
+          memo: this.task.memo,
+          user_id: this.$store.getters.getUser.id,
+          project_id: this.$store.getters.getSelectedProject.project_id,
+          phase_id: this.$store.getters.getSelectedPhase.phase_id,
+        })
+        .then((response) => {
+          console.log(response);
+          const res = JSON.parse(response.data);
+          if (res.response == "OK") {
+            console.log("a");
+            //タスクの進捗度更新と同様にTaskInfoでタスク情報を更新するフックを書く
+            this.$store.commit("setTaskUpdateHook", {
+              taskUpdateHook: {
+                hook: !this.$store.getters.getTaskUpdateHook.hook,
+              },
+            });
+            this.$bvModal.hide("modal-create_task");
           } else if (res.response == "Bad Request") {
             console.log("Bad Request Reason: " + res.reason);
           }

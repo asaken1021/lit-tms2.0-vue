@@ -11,6 +11,11 @@
       v-bind:fields="fields"
       v-on:row-selected="onTaskSelected"
     ></b-table>
+    <b-button
+      variant="primary"
+      v-on:click="$bvModal.show('modal-create_task')"
+      v-if="isShowButton"
+    >新規タスク作成</b-button>
   </div>
 </template>
 
@@ -55,6 +60,7 @@ export default {
         },
       ],
       isShow: false,
+      isShowButton: false,
     };
   },
   mounted() {
@@ -107,6 +113,13 @@ export default {
           return true;
         }
       });
+
+      if (
+        this.$store.getters.getUser.id ==
+        this.$store.getters.getSelectedProject.project_user_id
+      ) {
+        this.isShowButton = true;
+      }
     },
     onTaskUpdated: async function () {
       const response = await axios.post("http://localhost:4567/api/v1", {
