@@ -120,21 +120,21 @@ export default {
         mail: "",
         name: "",
         password: "",
-        password_confirmation: "",
+        password_confirmation: ""
       },
       project: {
-        name: "",
+        name: ""
       },
       phase: {
         name: "",
-        deadline: "",
+        deadline: ""
       },
       task: {
         id: -1,
         name: "",
         memo: "",
-        progress: 0,
-      },
+        progress: 0
+      }
     };
   },
   mounted() {
@@ -154,7 +154,7 @@ export default {
           mail: this.user.mail,
           name: this.user.name,
           password: this.user.password,
-          password_confirmation: this.user.password_confirmation,
+          password_confirmation: this.user.password_confirmation
         })
         .then((response) => {
           console.log(response);
@@ -165,8 +165,8 @@ export default {
                 id: res.id,
                 mail: res.mail,
                 name: res.name,
-                lineid: res.lineid,
-              },
+                lineid: res.lineid
+              }
             });
             this.$bvModal.hide("modal-sign_up");
           } else if (res.response == "Bad Request") {
@@ -179,7 +179,7 @@ export default {
         .post("http://localhost:4567/api/v1", {
           type: "sign_in",
           mail: this.user.mail,
-          password: this.user.password,
+          password: this.user.password
         })
         .then((response) => {
           console.log(response);
@@ -190,8 +190,8 @@ export default {
                 id: res.id,
                 mail: res.mail,
                 name: res.name,
-                lineid: res.lineid,
-              },
+                lineid: res.lineid
+              }
             });
             this.$bvModal.hide("modal-sign_in");
           } else if (res.response == "Bad Request") {
@@ -202,7 +202,7 @@ export default {
     sign_out: function () {
       axios
         .post("http://localhost:4567/api/v1", {
-          type: "sign_out",
+          type: "sign_out"
         })
         .then((response) => {
           console.log(response);
@@ -211,8 +211,8 @@ export default {
               id: -1,
               mail: "",
               name: "",
-              lineid: "",
-            },
+              lineid: ""
+            }
           });
           this.$bvModal.hide("modal-sign_out");
         });
@@ -222,14 +222,14 @@ export default {
         .post("http://localhost:4567/api/v1", {
           type: "create_project",
           name: this.project.name,
-          user_id: this.$store.getters.getUser.id,
+          user_id: this.$store.getters.getUser.id
         })
         .then((response) => {
           console.log(response);
           const res = JSON.parse(response.data);
           if (res.response == "OK") {
             this.$router.push({
-              path: "/project/" + res.project.id,
+              path: "/project/" + res.project.id
             });
             this.$bvModal.hide("modal-create_project");
           } else if (res.response == "Bad Request") {
@@ -244,18 +244,13 @@ export default {
           name: this.phase.name,
           deadline: this.phase.deadline,
           user_id: this.$store.getters.getUser.id,
-          project_id: this.$store.getters.getSelectedProject.project_id,
+          project_id: this.$store.getters.getSelectedProject.project_id
         })
         .then((response) => {
           console.log(response);
           const res = JSON.parse(response.data);
           if (res.response == "OK") {
             console.log("phase created");
-            this.$store.commit("setPhaseReloadHook", {
-              phaseReloadHook: {
-                hook: !this.$store.getters.getPhaseReloadHook.hook,
-              },
-            });
             this.$bvModal.hide("modal-create_phase");
           } else if (res.response == "Bad Request") {
             console.log("Bad Request Reason: " + res.reason);
@@ -270,19 +265,13 @@ export default {
           memo: this.task.memo,
           user_id: this.$store.getters.getUser.id,
           project_id: this.$store.getters.getSelectedProject.project_id,
-          phase_id: this.$store.getters.getSelectedPhase.phase_id,
+          phase_id: this.$store.getters.getSelectedPhase.phase_id
         })
         .then((response) => {
           console.log(response);
           const res = JSON.parse(response.data);
           if (res.response == "OK") {
-            console.log("a");
-            //タスクの進捗度更新と同様にTaskInfoでタスク情報を更新するフックを書く
-            this.$store.commit("setTaskUpdateHook", {
-              taskUpdateHook: {
-                hook: !this.$store.getters.getTaskUpdateHook.hook,
-              },
-            });
+            this.$emit("onProjectUpdate");
             this.$bvModal.hide("modal-create_task");
           } else if (res.response == "Bad Request") {
             console.log("Bad Request Reason: " + res.reason);
@@ -295,24 +284,20 @@ export default {
           type: "change_task_progress",
           user_id: this.$store.getters.getUser.id,
           task_id: this.$store.getters.getSelectedTask.task_id,
-          task_progress: this.task.progress,
+          task_progress: this.task.progress
         })
         .then((response) => {
           console.log(response);
           const res = JSON.parse(response.data);
           if (res.response == "OK") {
-            this.$store.commit("setTaskUpdateHook", {
-              taskUpdateHook: {
-                hook: !this.$store.getters.getTaskUpdateHook.hook,
-              },
-            });
+            this.$emit("onProjectUpdate");
             this.$bvModal.hide("modal-change_task_progress");
           } else if (res.response == "Bad Request") {
             console.log("Bad Request Reason: " + res.reason);
           }
         });
-    },
-  },
+    }
+  }
 };
 </script>
 

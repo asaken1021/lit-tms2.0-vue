@@ -4,9 +4,12 @@ import Main from '../views/Main.vue'
 import Projects from '../views/Projects.vue'
 import Project from '../views/Project.vue'
 import BootstrapVue from 'bootstrap-vue'
+import VueC3 from "vue-c3";
+import "c3/c3.min.css";
 
 Vue.use(VueRouter)
 Vue.use(BootstrapVue)
+Vue.use(VueC3)
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'

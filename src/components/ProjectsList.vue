@@ -3,9 +3,11 @@
     <div class="container">
       <b-card class="text-center" v-for="project in projects" v-bind:key="project.id">
         <b-card-body>
-          <router-link tag="a" :to="`/project/${project.id}`">
-            <h4>{{ project.name }}</h4>
-          </router-link>
+          <!-- <router-link tag="a" :to="`/project/${project.id}`"> -->
+          <a href="#">
+            <h4 v-on:click="showLoading(project.id)">{{ project.name }}</h4>
+          </a>
+          <!-- </router-link> -->
         </b-card-body>
       </b-card>
       <b-card class="text-center" v-if="showError">
@@ -32,7 +34,7 @@ export default {
     };
   },
   mounted() {
-    this.$nextTick(function() {
+    this.$nextTick(function () {
       const userInfo = this.$store.getters.getUser;
       axios
         .post("http://localhost:4567/api/v1", {
@@ -55,6 +57,16 @@ export default {
           }
         });
     });
+  },
+  methods: {
+    showLoading: function (id) {
+      this.$store.commit("setLoadingState", {
+        loadingState: {
+          isShow: true
+        }
+      })
+      this.$router.push("/project/" + id);
+    }
   }
 };
 </script>

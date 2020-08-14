@@ -23,7 +23,11 @@
                 class="btn btn-primary btn-custom margin-right-5px"
                 to="/user_settings"
               >ユーザー設定</router-link>
-              <b-button variant="primary" class="btn-custom" v-b-modal.modal-sign_out>サインアウト</b-button>
+              <b-button
+                variant="primary"
+                class="btn-custom"
+                v-on:click="$bvModal.show('modal-sign_out')"
+              >サインアウト</b-button>
             </div>
             <div v-else>
               <b-button variant="primary" class="margin-right-5px" v-b-modal.modal-sign_up>新規登録</b-button>

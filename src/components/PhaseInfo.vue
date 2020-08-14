@@ -7,7 +7,6 @@
       selectable
       select-mode="single"
       class="margin-bottom-20px"
-      v-if="isShow"
       v-bind:items="phases"
       v-bind:fields="fields"
       v-on:row-selected="onPhaseSelected"
@@ -15,19 +14,17 @@
     <b-button
       variant="primary"
       v-on:click="$bvModal.show('modal-create_phase')"
-      v-if="isShowButton"
+      v-if="checkUser()"
     >新規フェーズ作成</b-button>
   </div>
 </template>
 
 <script>
-import axios from "axios";
-
 export default {
   name: "PhaseInfo",
+  props: ["project", "phases"],
   data() {
     return {
-      phases: [],
       fields: [
         {
           key: "name",
@@ -36,62 +33,24 @@ export default {
         {
           key: "deadline",
           label: "締め切り日付",
-          formatter: value => {
+          formatter: (value) => {
             return value.replace(/-/g, "/");
           }
         }
       ],
-      isShow: false,
-      isShowButton: false
+      p: []
     };
   },
-  mounted() {
-    this.$nextTick(function() {
-      this.phaseLoad();
-    });
-
-    this.$store.subscribe(mutation => {
-      if (mutation.type == "setPhaseReloadHook") {
-        this.phaseLoad();
-      }
-    });
-  },
   methods: {
-    phaseLoad: function() {
-      axios
-        .post("http://localhost:4567/api/v1", {
-          type: "get_project_info",
-          project_id: this.$store.getters.getSelectedProject.project_id
-        })
-        .then(response => {
-          console.log("phase_response", response);
-          const res = JSON.parse(response.data);
-          if (res.response == "OK") {
-            // console.log(res.phases);
-
-            this.phases = res.phases;
-
-            if (this.phases.length == 0) {
-              this.phases = [
-                {
-                  name: "フェーズがありません",
-                  deadline: ""
-                }
-              ];
-            }
-
-            this.isShow = true;
-
-            if (this.$store.getters.getUser.id == res.project.user_id) {
-              this.isShowButton = true;
-            }
-          } else if (res.response == "Bad Request") {
-            console.log("Bad Request");
-            this.isShow = false;
-          }
-        });
+    checkUser: function () {
+      console.log("PhaseInfo checkUser called");
+      if (this.p.user_id == this.$store.getters.getUser.id) {
+        return true;
+      } else {
+        return false;
+      }
     },
-    onPhaseSelected: function(item) {
+    onPhaseSelected: function (item) {
       if (item[0] != null) {
         this.$store.commit("setSelectedPhase", {
           selectedPhase: {
@@ -99,6 +58,13 @@ export default {
           }
         });
       }
+    }
+  },
+  watch: {
+    project: function (newerProjectInfo) {
+      console.log("PhaseInfo this.project watch called", newerProjectInfo);
+      this.p = newerProjectInfo;
+      // this.checkUser();
     }
   }
 };
