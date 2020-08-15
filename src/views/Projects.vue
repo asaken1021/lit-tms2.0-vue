@@ -1,8 +1,8 @@
 <template>
   <div class="container view-projects">
-    <Title title="プロジェクト一覧" />
-    <ProjectsList />
-    <Loading :isShow="isShow()" />
+    <Title v-if="!isShow()" title="プロジェクト一覧" />
+    <ProjectsList v-if="!isShow()" />
+    <Loading v-if="isShow()" />
     <Modals />
   </div>
 </template>

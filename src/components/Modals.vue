@@ -111,6 +111,15 @@
 
 <script>
 import axios from "axios";
+const api = axios.create({
+  baseURL: 'http://localhost:8080/api',
+  headers: {
+    'Content-Type': 'application/json',
+    'X-Requested-With': 'XMLHttpRequest'
+  },
+  responseType: 'json',
+  withCredentials: true
+});
 
 export default {
   name: "Modals",
@@ -148,8 +157,8 @@ export default {
   },
   methods: {
     sign_up: function () {
-      axios
-        .post("http://localhost:4567/api/v1", {
+      api
+        .post("/v1", {
           type: "sign_up",
           mail: this.user.mail,
           name: this.user.name,
@@ -158,7 +167,7 @@ export default {
         })
         .then((response) => {
           console.log(response);
-          const res = JSON.parse(response.data);
+          const res = response.data;
           if (res.response == "OK") {
             this.$store.commit("setUser", {
               user: {
@@ -175,15 +184,15 @@ export default {
         });
     },
     sign_in: function () {
-      axios
-        .post("http://localhost:4567/api/v1", {
+      api
+        .post("/v1", {
           type: "sign_in",
           mail: this.user.mail,
           password: this.user.password
         })
         .then((response) => {
           console.log(response);
-          const res = JSON.parse(response.data);
+          const res = response.data;
           if (res.response == "OK") {
             this.$store.commit("setUser", {
               user: {
@@ -200,8 +209,8 @@ export default {
         });
     },
     sign_out: function () {
-      axios
-        .post("http://localhost:4567/api/v1", {
+      api
+        .post("/v1", {
           type: "sign_out"
         })
         .then((response) => {
@@ -218,15 +227,15 @@ export default {
         });
     },
     create_project: function () {
-      axios
-        .post("http://localhost:4567/api/v1", {
+      api
+        .post("/v1", {
           type: "create_project",
           name: this.project.name,
           user_id: this.$store.getters.getUser.id
         })
         .then((response) => {
           console.log(response);
-          const res = JSON.parse(response.data);
+          const res = response.data;
           if (res.response == "OK") {
             this.$router.push({
               path: "/project/" + res.project.id
@@ -238,8 +247,8 @@ export default {
         });
     },
     create_phase: function () {
-      axios
-        .post("http://localhost:4567/api/v1", {
+      api
+        .post("/v1", {
           type: "create_phase",
           name: this.phase.name,
           deadline: this.phase.deadline,
@@ -248,7 +257,7 @@ export default {
         })
         .then((response) => {
           console.log(response);
-          const res = JSON.parse(response.data);
+          const res = response.data;
           if (res.response == "OK") {
             console.log("phase created");
             this.$bvModal.hide("modal-create_phase");
@@ -258,8 +267,8 @@ export default {
         });
     },
     create_task: function () {
-      axios
-        .post("http://localhost:4567/api/v1", {
+      api
+        .post("/v1", {
           type: "create_task",
           name: this.task.name,
           memo: this.task.memo,
@@ -269,7 +278,7 @@ export default {
         })
         .then((response) => {
           console.log(response);
-          const res = JSON.parse(response.data);
+          const res = response.data;
           if (res.response == "OK") {
             this.$emit("onProjectUpdate");
             this.$bvModal.hide("modal-create_task");
@@ -279,8 +288,8 @@ export default {
         });
     },
     change_task_progress: function () {
-      axios
-        .post("http://localhost:4567/api/v1", {
+      api
+        .post("/v1", {
           type: "change_task_progress",
           user_id: this.$store.getters.getUser.id,
           task_id: this.$store.getters.getSelectedTask.task_id,
@@ -288,7 +297,7 @@ export default {
         })
         .then((response) => {
           console.log(response);
-          const res = JSON.parse(response.data);
+          const res = response.data;
           if (res.response == "OK") {
             this.$emit("onProjectUpdate");
             this.$bvModal.hide("modal-change_task_progress");

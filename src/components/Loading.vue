@@ -1,6 +1,6 @@
 <template>
   <div class="component-loading">
-    <spinner v-if="isShow"></spinner>
+    <spinner></spinner>
   </div>
 </template>
 
@@ -11,7 +11,6 @@ export default {
   name: "Loading",
   components: {
     spinner
-  },
-  props: ["isShow"]
+  }
 }
 </script>

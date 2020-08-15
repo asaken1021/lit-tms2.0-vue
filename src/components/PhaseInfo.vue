@@ -45,10 +45,17 @@ export default {
     checkUser: function () {
       console.log("PhaseInfo checkUser called");
       if (this.p.user_id == this.$store.getters.getUser.id) {
+        console.log("PhaseInfo user id check (true)");
+        console.log("this.p.user_id", this.p.user_id);
+        console.log("this.$store.getters.getUser.id", this.$store.getters.getUser.id);
         return true;
       } else {
+        console.log("PhaseInfo user id check (false)");
+        console.log("this.p.user_id", this.p.user_id);
+        console.log("this.$store.getters.getUser.id", this.$store.getters.getUser.id);
         return false;
       }
+
     },
     onPhaseSelected: function (item) {
       if (item[0] != null) {

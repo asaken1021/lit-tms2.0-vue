@@ -22,6 +22,15 @@
 
 <script>
 import axios from "axios";
+const api = axios.create({
+  baseURL: 'http://localhost:8080/api',
+  headers: {
+    'Content-Type': 'application/json',
+    'X-Requested-With': 'XMLHttpRequest'
+  },
+  responseType: 'json',
+  withCredentials: true
+});
 
 export default {
   name: "ProjectsList",
@@ -36,14 +45,14 @@ export default {
   mounted() {
     this.$nextTick(function () {
       const userInfo = this.$store.getters.getUser;
-      axios
-        .post("http://localhost:4567/api/v1", {
+      api
+        .post("/v1", {
           type: "get_projects",
           id: userInfo.id
         })
         .then(response => {
           console.log(response);
-          const res = JSON.parse(response.data);
+          const res = response.data;
           if (res.response == "OK") {
             this.projects = res.projects;
           } else if (res.response == "Bad Request") {
