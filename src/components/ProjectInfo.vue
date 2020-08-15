@@ -2,22 +2,20 @@
   <div class="component-projectinfo">
     <Title :title="this.project.name" />
     <div class="container">
-      <vue-c3 :handler="handler" />
+      <div id="chart" />
     </div>
   </div>
 </template>
 
 <script>
 import Title from "@/components/Title.vue";
-import Vue from "vue";
-import VueC3 from "vue-c3";
+import C3 from "c3";
 import "c3/c3.min.css";
 
 export default {
   name: "ProjectInfo",
   components: {
-    Title,
-    VueC3
+    Title
   },
   props: ["project"],
   data() {
@@ -36,12 +34,29 @@ export default {
           order: null
         }
       },
-      handler: new Vue()
+      chart: null
     };
   },
   mounted() {
     this.$nextTick(function () {
-      this.handler.$emit("init", this.chart_options);
+      // this.handler.$emit("init", this.chart_options);
+
+      console.log("this.data", this.data)
+
+      this.chart = C3.generate({
+        size: {
+          width: this.chart_options.size.width,
+          height: this.chart_options.size.height
+        },
+        data: {
+          columns: this.chart_options.data.columns,
+          type: this.chart_options.data.type,
+          order: this.chart_options.data.order
+        }
+      })
+
+      console.log("this.chart", this.chart);
+
       this.projectChartColumnUpdate();
     });
   },
@@ -56,9 +71,13 @@ export default {
   watch: {
     "chart_options.data.columns": function () {
       console.log("watch called");
-      this.handler.$emit("dispatch", (chart) => {
-        chart.load(this.chart_options.data);
-      });
+      console.log(this.chart_options.data.columns);
+
+      this.chart.load({ columns: this.chart_options.data.columns });
+      // this.chart.flush();
+      // this.handler.$emit("dispatch", (chart) => {
+      //   chart.load(this.chart_options.data);
+      // });
     },
     "project": function () {
       this.projectChartColumnUpdate();
