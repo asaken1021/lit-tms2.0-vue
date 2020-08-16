@@ -3,7 +3,12 @@
     <ProjectInfo :project="project" />
     <PhaseInfo :project="project" :phases="phases" />
     <TaskInfo :project="project" :tasks="tasks" />
-    <Modals @onProjectUpdate="projectUpdateEvent" />
+    <Modals
+      :project="project"
+      :phases="phases"
+      :tasks="tasks"
+      @onProjectUpdate="projectUpdateEvent"
+    />
   </div>
 </template>
 

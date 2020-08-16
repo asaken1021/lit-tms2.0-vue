@@ -79,7 +79,7 @@ export default {
       //   chart.load(this.chart_options.data);
       // });
     },
-    "project": function () {
+    project: function () {
       this.projectChartColumnUpdate();
     }
   }

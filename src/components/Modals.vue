@@ -52,7 +52,12 @@
     </b-modal>
     <!-- TODO:LINEの通知設定modalの追加 -->
     <b-modal id="modal-create_project" title="新規プロジェクト作成" size="lg" centered>
-      <b-form-input v-model="project.name" type="text" name="project_name" placeholder="プロジェクト名" />
+      <b-form-input
+        v-model="modal_project.name"
+        type="text"
+        name="project_name"
+        placeholder="プロジェクト名"
+      />
       <template v-slot:modal-footer>
         <b-button variant="secondary" v-on:click="$bvModal.hide('modal-create_project')">キャンセル</b-button>
         <b-button variant="primary" v-on:click="create_project">作成</b-button>
@@ -77,16 +82,16 @@
       </template>
     </b-modal>
     <b-modal id="modal-create_phase" title="新規フェーズ作成" size="lg" centered>
-      <b-form-input v-model="phase.name" type="text" name="phase_name" placeholder="フェーズ名" />
-      <b-form-datepicker v-model="phase.deadline" placeholder="締め切り日付" />
+      <b-form-input v-model="modal_phase.name" type="text" name="phase_name" placeholder="フェーズ名" />
+      <b-form-datepicker v-model="modal_phase.deadline" placeholder="締め切り日付" />
       <template v-slot:modal-footer>
         <b-button variant="secondary" v-on:click="$bvModal.hide('modal-create_phase')">キャンセル</b-button>
         <b-button variant="primary" v-on:click="create_phase">作成</b-button>
       </template>
     </b-modal>
     <b-modal id="modal-create_task" title="新規タスク作成" size="lg" centered>
-      <b-form-input v-model="task.name" type="text" name="task_name" placeholder="タスク名" />
-      <b-form-input v-model="task.memo" type="text" name="task_memo" placeholder="メモ" />
+      <b-form-input v-model="modal_task.name" type="text" name="task_name" placeholder="タスク名" />
+      <b-form-input v-model="modal_task.memo" type="text" name="task_memo" placeholder="メモ" />
       <template v-slot:modal-footer>
         <b-button variant="secondary" v-on:click="$bvModal.hide('modal-create_task')">キャンセル</b-button>
         <b-button variant="primary" v-on:click="create_task">作成</b-button>
@@ -95,12 +100,12 @@
     <b-modal
       id="modal-change_task_progress"
       body-class="text-centered"
-      v-bind:title="'タスクの進捗度編集: ' + task.name "
+      v-bind:title="'タスクの進捗度編集: ' + modal_task.name "
       size="lg"
       centered
     >
-      <b-form-input type="range" name="progress" min="0" max="100" v-model="task.progress" />
-      <span>{{ task.progress }}%</span>
+      <b-form-input type="range" name="progress" min="0" max="100" v-model="modal_task.progress" />
+      <span>{{ modal_task.progress }}%</span>
       <template v-slot:modal-footer>
         <b-button variant="secondary" v-on:click="$bvModal.hide('modal-change_task_progress')">キャンセル</b-button>
         <b-button variant="primary" v-on:click="change_task_progress">保存</b-button>
@@ -123,6 +128,7 @@ const api = axios.create({
 
 export default {
   name: "Modals",
+  props: ["project", "phases", "tasks"],
   data() {
     return {
       user: {
@@ -131,15 +137,9 @@ export default {
         password: "",
         password_confirmation: ""
       },
-      project: {
-        name: ""
-      },
-      phase: {
-        name: "",
-        deadline: ""
-      },
-      task: {
-        id: -1,
+      modal_project: {},
+      modal_phase: {},
+      modal_task: {
         name: "",
         memo: "",
         progress: 0
@@ -149,9 +149,9 @@ export default {
   mounted() {
     this.$store.subscribe((mutation, state) => {
       if (mutation.type == "setSelectedTask") {
-        this.task.id = state.selectedTask.task_id;
-        this.task.name = state.selectedTask.task_name;
-        this.task.progress = state.selectedTask.task_progress;
+        this.modal_task.id = state.selectedTask.task_id;
+        this.modal_task.name = state.selectedTask.task_name;
+        this.modal_task.progress = state.selectedTask.task_progress;
       }
     });
   },
@@ -250,10 +250,10 @@ export default {
       api
         .post("/v1", {
           type: "create_phase",
-          name: this.phase.name,
-          deadline: this.phase.deadline,
+          name: this.modal_phase.name,
+          deadline: this.modal_phase.deadline,
           user_id: this.$store.getters.getUser.id,
-          project_id: this.$store.getters.getSelectedProject.project_id
+          project_id: this.project.id
         })
         .then((response) => {
           console.log(response);
@@ -270,10 +270,10 @@ export default {
       api
         .post("/v1", {
           type: "create_task",
-          name: this.task.name,
-          memo: this.task.memo,
+          name: this.modal_task.name,
+          memo: this.modal_task.memo,
           user_id: this.$store.getters.getUser.id,
-          project_id: this.$store.getters.getSelectedProject.project_id,
+          project_id: this.project.id,
           phase_id: this.$store.getters.getSelectedPhase.phase_id
         })
         .then((response) => {
@@ -293,7 +293,7 @@ export default {
           type: "change_task_progress",
           user_id: this.$store.getters.getUser.id,
           task_id: this.$store.getters.getSelectedTask.task_id,
-          task_progress: this.task.progress
+          task_progress: this.modal_task.progress
         })
         .then((response) => {
           console.log(response);
