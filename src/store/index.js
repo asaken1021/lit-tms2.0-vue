@@ -5,11 +5,9 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-    user: {
-      id: -1,
+    state: {
       name: "",
-      mail: "",
-      lineid: ""
+      token: ""
     },
     selectedProject: {
       project_id: -1,
@@ -23,14 +21,11 @@ const store = new Vuex.Store({
       task_id: -1,
       task_name: "",
       task_progress: 0
-    },
-    loadingState: {
-      isShow: false
     }
   },
   getters: {
-    getUser(state) {
-      return state.user;
+    getState(state) {
+      return state.state;
     },
     getSelectedProject(state) {
       return state.selectedProject;
@@ -40,14 +35,11 @@ const store = new Vuex.Store({
     },
     getSelectedTask(state) {
       return state.selectedTask;
-    },
-    getLoadingState(state) {
-      return state.loadingState;
     }
   },
   mutations: {
-    setUser(state, payload) {
-      state.user = payload.user;
+    setState(state, payload) {
+      state.state = payload.state;
     },
     setSelectedProject(state, payload) {
       state.selectedProject = payload.selectedProject;
@@ -57,9 +49,6 @@ const store = new Vuex.Store({
     },
     setSelectedTask(state, payload) {
       state.selectedTask = payload.selectedTask;
-    },
-    setLoadingState(state, payload) {
-      state.loadingState = payload.loadingState;
     }
   }
 })

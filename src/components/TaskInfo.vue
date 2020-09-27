@@ -15,7 +15,8 @@
       variant="primary"
       v-on:click="$bvModal.show('modal-create_task')"
       v-if="checkUser()"
-    >新規タスク作成</b-button>
+      >新規タスク作成</b-button
+    >
   </div>
 </template>
 
@@ -72,8 +73,6 @@ export default {
   },
   methods: {
     onTaskSelected: function (item) {
-      const userInfo = this.$store.getters.getUser;
-
       if (item[0] != null) {
         this.$store.commit("setSelectedTask", {
           selectedTask: {
@@ -82,7 +81,7 @@ export default {
             task_progress: item[0].progress
           }
         });
-        if (userInfo.id == this.project.user_id) {
+        if (this.$store.getters.getState.id == this.project.user_id) {
           this.$bvModal.show("modal-change_task_progress");
         }
       }
@@ -96,7 +95,7 @@ export default {
     },
     checkUser: function () {
       if (this.isShow) {
-        if (this.$store.getters.getUser.id == this.project.user_id) {
+        if (this.$store.getters.getState.id == this.project.user_id) {
           return true;
         } else {
           return false;
@@ -115,7 +114,7 @@ export default {
     }
   },
   watch: {
-    project: function () {
+    tasks: function () {
       this.taskFilter();
     }
   }

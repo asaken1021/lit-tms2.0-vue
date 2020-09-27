@@ -19,7 +19,7 @@ import TaskInfo from "@/components/TaskInfo.vue";
 import Modals from "@/components/Modals.vue";
 import axios from "axios";
 const api = axios.create({
-  baseURL: 'http://localhost:8080/api',
+  baseURL: 'http://localhost:4568/api/v2',
   headers: {
     'Content-Type': 'application/json',
     'X-Requested-With': 'XMLHttpRequest'
@@ -73,27 +73,34 @@ export default {
 
       this.getProject();
 
-      console.log("before setLoadingState");
-      this.$store.commit("setLoadingState", {
-        loadingState: {
-          ishow: false
-        }
-      })
-      console.log("after setLoadingState");
+      // console.log("before setLoadingState");
+      // this.$store.commit("setLoadingState", {
+      //   loadingState: {
+      //     ishow: false
+      //   }
+      // })
+      // console.log("after setLoadingState");
     });
   },
   methods: {
     getProject() {
-      api.post("/v1", {
-        type: "get_project_info",
-        project_id: this.$route.params.id
+      api.get("/projects/" + this.$route.params.id, {
       }).then((response) => {
         console.log(response);
-        const res = response.data;
 
-        this.project = res.project;
-        this.phases = res.phases;
-        this.tasks = res.tasks;
+        this.project = response.data.project;
+      })
+      api.get("/phases?project_id=" + this.$route.params.id, {
+      }).then((response) => {
+        console.log("phase get", response);
+
+        this.phases = response.data.phases;
+      })
+      api.get("/tasks?project_id=" + this.$route.params.id, {
+      }).then((response) => {
+        console.log("task get", response);
+
+        this.tasks = response.data.tasks;
       })
     },
     projectUpdateEvent() {

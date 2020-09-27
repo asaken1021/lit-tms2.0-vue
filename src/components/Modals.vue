@@ -1,8 +1,18 @@
 <template>
   <div class="component-modals">
     <b-modal id="modal-sign_up" title="新規ユーザー登録" size="lg" centered>
-      <b-form-input v-model="user.name" type="text" name="name" placeholder="表示名(ニックネーム)" />
-      <b-form-input v-model="user.mail" type="email" name="mail" placeholder="メールアドレス" />
+      <b-form-input
+        v-model="user.name"
+        type="text"
+        name="name"
+        placeholder="表示名(ニックネーム)"
+      />
+      <b-form-input
+        v-model="user.mail"
+        type="email"
+        name="mail"
+        placeholder="メールアドレス"
+      />
       <b-form-input
         v-model="user.password"
         type="password"
@@ -16,42 +26,97 @@
         placeholder="パスワード(確認)"
       />
       <template v-slot:modal-footer>
-        <b-button variant="secondary" v-on:click="$bvModal.hide('modal-sign_up')">キャンセル</b-button>
+        <b-button
+          variant="secondary"
+          v-on:click="$bvModal.hide('modal-sign_up')"
+          >キャンセル</b-button
+        >
         <b-button variant="primary" v-on:click="sign_up">登録</b-button>
       </template>
     </b-modal>
     <b-modal id="modal-sign_in" title="サインイン" size="lg" centered>
-      <b-form-input v-model="user.mail" type="email" name="mail" placeholder="メールアドレス" />
-      <b-form-input v-model="user.password" type="password" name="password" placeholder="パスワード" />
+      <b-form-input
+        v-model="user.mail"
+        type="email"
+        name="mail"
+        placeholder="メールアドレス"
+      />
+      <b-form-input
+        v-model="user.password"
+        type="password"
+        name="password"
+        placeholder="パスワード"
+      />
       <template v-slot:modal-footer>
-        <b-button variant="secondary" v-on:click="$bvModal.hide('modal-sign_in')">キャンセル</b-button>
+        <b-button
+          variant="secondary"
+          v-on:click="$bvModal.hide('modal-sign_in')"
+          >キャンセル</b-button
+        >
         <b-button variant="primary" v-on:click="sign_in">サインイン</b-button>
       </template>
     </b-modal>
     <b-modal id="modal-sign_out" title="サインアウト" size="lg" centered>
       <p>本当にサインアウトしますか？</p>
       <template v-slot:modal-footer>
-        <b-button variant="secondary" v-on:click="$bvModal.hide('modal-sign_out')">キャンセル</b-button>
-        <b-button variant="primary" v-on:click="sign_out">サインアウト</b-button>
+        <b-button
+          variant="secondary"
+          v-on:click="$bvModal.hide('modal-sign_out')"
+          >キャンセル</b-button
+        >
+        <b-button variant="primary" v-on:click="sign_out"
+          >サインアウト</b-button
+        >
       </template>
     </b-modal>
-    <b-modal id="modal-create_group" title="新規グループ作成" size="lg" centered>
+    <b-modal
+      id="modal-create_group"
+      title="新規グループ作成"
+      size="lg"
+      centered
+    >
       <b-form-input type="text" name="name" placeholder="グループ名" />
-      <b-form-input type="text" name="description" placeholder="グループの概要" />
+      <b-form-input
+        type="text"
+        name="description"
+        placeholder="グループの概要"
+      />
       <template v-slot:modal-footer>
-        <b-button variant="secondary" v-on:click="$bvModal.hide('modal-create_group')">キャンセル</b-button>
+        <b-button
+          variant="secondary"
+          v-on:click="$bvModal.hide('modal-create_group')"
+          >キャンセル</b-button
+        >
         <b-button variant="primary">作成</b-button>
       </template>
     </b-modal>
-    <b-modal id="modal-set_groups" title="所属グループの設定" size="lg" centered>
-      <b-form-input type="text" name="group_names" placeholder="グループ名(スペースで区切る)" />
+    <b-modal
+      id="modal-set_groups"
+      title="所属グループの設定"
+      size="lg"
+      centered
+    >
+      <b-form-input
+        type="text"
+        name="group_names"
+        placeholder="グループ名(スペースで区切る)"
+      />
       <template v-slot:modal-footer>
-        <b-button variant="secondary" v-on:click="$bvModal.hide('modal-set_groups')">キャンセル</b-button>
+        <b-button
+          variant="secondary"
+          v-on:click="$bvModal.hide('modal-set_groups')"
+          >キャンセル</b-button
+        >
         <b-button variant="primary">保存</b-button>
       </template>
     </b-modal>
     <!-- TODO:LINEの通知設定modalの追加 -->
-    <b-modal id="modal-create_project" title="新規プロジェクト作成" size="lg" centered>
+    <b-modal
+      id="modal-create_project"
+      title="新規プロジェクト作成"
+      size="lg"
+      centered
+    >
       <b-form-input
         v-model="modal_project.name"
         type="text"
@@ -59,56 +124,122 @@
         placeholder="プロジェクト名"
       />
       <template v-slot:modal-footer>
-        <b-button variant="secondary" v-on:click="$bvModal.hide('modal-create_project')">キャンセル</b-button>
+        <b-button
+          variant="secondary"
+          v-on:click="$bvModal.hide('modal-create_project')"
+          >キャンセル</b-button
+        >
         <b-button variant="primary" v-on:click="create_project">作成</b-button>
       </template>
     </b-modal>
-    <b-modal id="modal-set_project_visibility" title="プロジェクトの公開設定" size="lg" centered>
+    <b-modal
+      id="modal-set_project_visibility"
+      title="プロジェクトの公開設定"
+      size="lg"
+      centered
+    >
       <b-form-radio name="project_visibility" value="public">公開</b-form-radio>
-      <b-form-radio name="project_visibility" value="private">非公開</b-form-radio>
+      <b-form-radio name="project_visibility" value="private"
+        >非公開</b-form-radio
+      >
       <template v-slot:modal-footer>
         <b-button
           variant="secondary"
           v-on:click="$bvModal.hide('modal-set_project_visibility')"
-        >キャンセル</b-button>
+          >キャンセル</b-button
+        >
         <b-button variant="primary">保存</b-button>
       </template>
     </b-modal>
-    <b-modal id="modal-remove_project" title="プロジェクトを削除" size="lg" centered>
-      <p>本当にプロジェクトを削除しますか？削除すると復元することはできません。</p>
+    <b-modal
+      id="modal-remove_project"
+      title="プロジェクトを削除"
+      size="lg"
+      centered
+    >
+      <p>
+        本当にプロジェクトを削除しますか？削除すると復元することはできません。
+      </p>
       <template v-slot:modal-footer>
-        <b-button variant="secondary" v-on:click="$bvModal.hide('modal-remove_project')">キャンセル</b-button>
+        <b-button
+          variant="secondary"
+          v-on:click="$bvModal.hide('modal-remove_project')"
+          >キャンセル</b-button
+        >
         <b-button variant="primary">削除</b-button>
       </template>
     </b-modal>
-    <b-modal id="modal-create_phase" title="新規フェーズ作成" size="lg" centered>
-      <b-form-input v-model="modal_phase.name" type="text" name="phase_name" placeholder="フェーズ名" />
-      <b-form-datepicker v-model="modal_phase.deadline" placeholder="締め切り日付" />
+    <b-modal
+      id="modal-create_phase"
+      title="新規フェーズ作成"
+      size="lg"
+      centered
+    >
+      <b-form-input
+        v-model="modal_phase.name"
+        type="text"
+        name="phase_name"
+        placeholder="フェーズ名"
+      />
+      <b-form-datepicker
+        v-model="modal_phase.deadline"
+        placeholder="締め切り日付"
+      />
       <template v-slot:modal-footer>
-        <b-button variant="secondary" v-on:click="$bvModal.hide('modal-create_phase')">キャンセル</b-button>
+        <b-button
+          variant="secondary"
+          v-on:click="$bvModal.hide('modal-create_phase')"
+          >キャンセル</b-button
+        >
         <b-button variant="primary" v-on:click="create_phase">作成</b-button>
       </template>
     </b-modal>
     <b-modal id="modal-create_task" title="新規タスク作成" size="lg" centered>
-      <b-form-input v-model="modal_task.name" type="text" name="task_name" placeholder="タスク名" />
-      <b-form-input v-model="modal_task.memo" type="text" name="task_memo" placeholder="メモ" />
+      <b-form-input
+        v-model="modal_task.name"
+        type="text"
+        name="task_name"
+        placeholder="タスク名"
+      />
+      <b-form-input
+        v-model="modal_task.memo"
+        type="text"
+        name="task_memo"
+        placeholder="メモ"
+      />
       <template v-slot:modal-footer>
-        <b-button variant="secondary" v-on:click="$bvModal.hide('modal-create_task')">キャンセル</b-button>
+        <b-button
+          variant="secondary"
+          v-on:click="$bvModal.hide('modal-create_task')"
+          >キャンセル</b-button
+        >
         <b-button variant="primary" v-on:click="create_task">作成</b-button>
       </template>
     </b-modal>
     <b-modal
       id="modal-change_task_progress"
       body-class="text-centered"
-      v-bind:title="'タスクの進捗度編集: ' + modal_task.name "
+      v-bind:title="'タスクの進捗度編集: ' + modal_task.name"
       size="lg"
       centered
     >
-      <b-form-input type="range" name="progress" min="0" max="100" v-model="modal_task.progress" />
+      <b-form-input
+        type="range"
+        name="progress"
+        min="0"
+        max="100"
+        v-model="modal_task.progress"
+      />
       <span>{{ modal_task.progress }}%</span>
       <template v-slot:modal-footer>
-        <b-button variant="secondary" v-on:click="$bvModal.hide('modal-change_task_progress')">キャンセル</b-button>
-        <b-button variant="primary" v-on:click="change_task_progress">保存</b-button>
+        <b-button
+          variant="secondary"
+          v-on:click="$bvModal.hide('modal-change_task_progress')"
+          >キャンセル</b-button
+        >
+        <b-button variant="primary" v-on:click="change_task_progress"
+          >保存</b-button
+        >
       </template>
     </b-modal>
   </div>
@@ -117,7 +248,7 @@
 <script>
 import axios from "axios";
 const api = axios.create({
-  baseURL: 'http://localhost:8080/api',
+  baseURL: 'http://localhost:4568/api/v2',
   headers: {
     'Content-Type': 'application/json',
     'X-Requested-With': 'XMLHttpRequest'
@@ -158,8 +289,7 @@ export default {
   methods: {
     sign_up: function () {
       api
-        .post("/v1", {
-          type: "sign_up",
+        .post("/users", {
           mail: this.user.mail,
           name: this.user.name,
           password: this.user.password,
@@ -167,143 +297,147 @@ export default {
         })
         .then((response) => {
           console.log(response);
-          const res = response.data;
-          if (res.response == "OK") {
-            this.$store.commit("setUser", {
-              user: {
-                id: res.id,
-                mail: res.mail,
-                name: res.name,
-                lineid: res.lineid
+          if (response.status == 200) {
+            this.$store.commit("setState", {
+              state: {
+                name: response.data.name,
+                id: response.data.id,
+                token: response.data.token
               }
-            });
-            this.$bvModal.hide("modal-sign_up");
-          } else if (res.response == "Bad Request") {
-            console.log("Bad Request Reason: " + res.reason);
+            })
+            this.$bvModal.hide("modal-sign_up")
           }
         });
     },
     sign_in: function () {
       api
-        .post("/v1", {
-          type: "sign_in",
+        .post("/session", {
           mail: this.user.mail,
           password: this.user.password
         })
         .then((response) => {
           console.log(response);
-          const res = response.data;
-          if (res.response == "OK") {
-            this.$store.commit("setUser", {
-              user: {
-                id: res.id,
-                mail: res.mail,
-                name: res.name,
-                lineid: res.lineid
+          if (response.status == 200) {
+            this.$store.commit("setState", {
+              state: {
+                name: response.data.name,
+                id: response.data.id,
+                token: response.data.token
               }
-            });
-            this.$bvModal.hide("modal-sign_in");
-          } else if (res.response == "Bad Request") {
-            console.log("Bad Request");
+            })
+            this.$bvModal.hide("modal-sign_in")
           }
         });
     },
     sign_out: function () {
       api
-        .post("/v1", {
-          type: "sign_out"
+        .delete("/session", {
+
         })
         .then((response) => {
           console.log(response);
-          this.$store.commit("setUser", {
-            user: {
-              id: -1,
-              mail: "",
-              name: "",
-              lineid: ""
-            }
-          });
-          this.$bvModal.hide("modal-sign_out");
+          if (response.status == 200 || response.status == 501) {
+            this.$store.commit("setState", {
+              state: {
+                name: "",
+                token: ""
+              }
+            })
+            this.$bvModal.hide("modal-sign_out");
+          }
         });
     },
     create_project: function () {
       api
-        .post("/v1", {
-          type: "create_project",
-          name: this.project.name,
-          user_id: this.$store.getters.getUser.id
+        .post("/projects", {
+          token: this.$store.getters.getState.token,
+          name: this.modal_project.name
         })
         .then((response) => {
           console.log(response);
-          const res = response.data;
-          if (res.response == "OK") {
+          if (response.status == 200) {
             this.$router.push({
-              path: "/project/" + res.project.id
-            });
-            this.$bvModal.hide("modal-create_project");
-          } else if (res.response == "Bad Request") {
-            console.log("Bad Request Reason: " + res.reason);
+              path: "/project/" + response.data.project.id
+            })
+            this.$bvModal.hide("modal-create_project")
           }
+          // const res = response.data;
+          // if (res.response == "OK") {
+          //   this.$router.push({
+          //     path: "/project/" + res.project.id
+          //   });
+          //   this.$bvModal.hide("modal-create_project");
+          // } else if (res.response == "Bad Request") {
+          //   console.log("Bad Request Reason: " + res.reason);
+          // }
         });
     },
     create_phase: function () {
       api
-        .post("/v1", {
-          type: "create_phase",
+        .post("/phases", {
+          token: this.$store.getters.getState.token,
           name: this.modal_phase.name,
           deadline: this.modal_phase.deadline,
-          user_id: this.$store.getters.getUser.id,
           project_id: this.project.id
         })
         .then((response) => {
           console.log(response);
-          const res = response.data;
-          if (res.response == "OK") {
-            console.log("phase created");
-            this.$bvModal.hide("modal-create_phase");
-          } else if (res.response == "Bad Request") {
-            console.log("Bad Request Reason: " + res.reason);
+          if (response.status == 200) {
+            this.$emit("onProjectUpdate")
+            this.$bvModal.hide("modal-create_phase")
           }
+          // const res = response.data;
+          // if (res.response == "OK") {
+          //   console.log("phase created");
+          //   this.$bvModal.hide("modal-create_phase");
+          // } else if (res.response == "Bad Request") {
+          //   console.log("Bad Request Reason: " + res.reason);
+          // }
         });
     },
     create_task: function () {
       api
-        .post("/v1", {
-          type: "create_task",
+        .post("/tasks", {
+          token: this.$store.getters.getState.token,
           name: this.modal_task.name,
           memo: this.modal_task.memo,
-          user_id: this.$store.getters.getUser.id,
           project_id: this.project.id,
           phase_id: this.$store.getters.getSelectedPhase.phase_id
         })
         .then((response) => {
           console.log(response);
-          const res = response.data;
-          if (res.response == "OK") {
-            this.$emit("onProjectUpdate");
-            this.$bvModal.hide("modal-create_task");
-          } else if (res.response == "Bad Request") {
-            console.log("Bad Request Reason: " + res.reason);
+          if (response.status == 200) {
+            this.$emit("onProjectUpdate")
+            this.$bvModal.hide("modal-create_task")
           }
+          // const res = response.data;
+          // if (res.response == "OK") {
+          //   this.$emit("onProjectUpdate");
+          //   this.$bvModal.hide("modal-create_task");
+          // } else if (res.response == "Bad Request") {
+          //   console.log("Bad Request Reason: " + res.reason);
+          // }
         });
     },
     change_task_progress: function () {
       api
-        .post("/v1", {
-          type: "change_task_progress",
-          user_id: this.$store.getters.getUser.id,
-          task_id: this.$store.getters.getSelectedTask.task_id,
+        .put("/tasks/" + this.$store.getters.getSelectedTask.task_id, {
+          token: this.$store.getters.getState.token,
           task_progress: this.modal_task.progress
         })
         .then((response) => {
           console.log(response);
-          const res = response.data;
-          if (res.response == "OK") {
-            this.$emit("onProjectUpdate");
-            this.$bvModal.hide("modal-change_task_progress");
-          } else if (res.response == "Bad Request") {
-            console.log("Bad Request Reason: " + res.reason);
+          if (response.status == 200) {
+            this.$emit("onProjectUpdate")
+            this.$bvModal.hide("modal-change_task_progress")
           }
+          // const res = response.data;
+          // if (res.response == "OK") {
+          //   this.$emit("onProjectUpdate");
+          //   this.$bvModal.hide("modal-change_task_progress");
+          // } else if (res.response == "Bad Request") {
+          //   console.log("Bad Request Reason: " + res.reason);
+          // }
         });
     }
   }

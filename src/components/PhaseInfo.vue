@@ -15,7 +15,8 @@
       variant="primary"
       v-on:click="$bvModal.show('modal-create_phase')"
       v-if="checkUser()"
-    >新規フェーズ作成</b-button>
+      >新規フェーズ作成</b-button
+    >
   </div>
 </template>
 
@@ -44,15 +45,15 @@ export default {
   methods: {
     checkUser: function () {
       console.log("PhaseInfo checkUser called");
-      if (this.p.user_id == this.$store.getters.getUser.id) {
+      if (this.p.user_id == this.$store.getters.getState.id) {
         console.log("PhaseInfo user id check (true)");
         console.log("this.p.user_id", this.p.user_id);
-        console.log("this.$store.getters.getUser.id", this.$store.getters.getUser.id);
+        console.log("this.$store.getters.getUser.id", this.$store.getters.getState.id);
         return true;
       } else {
         console.log("PhaseInfo user id check (false)");
         console.log("this.p.user_id", this.p.user_id);
-        console.log("this.$store.getters.getUser.id", this.$store.getters.getUser.id);
+        console.log("this.$store.getters.getUser.id", this.$store.getters.getState.id);
         return false;
       }
 

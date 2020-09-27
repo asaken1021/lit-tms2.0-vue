@@ -1,13 +1,15 @@
 <template>
   <div class="component-projectslist">
     <div class="container">
-      <b-card class="text-center" v-for="project in projects" v-bind:key="project.id">
+      <b-card
+        class="text-center"
+        v-for="project in projects"
+        v-bind:key="project.id"
+      >
         <b-card-body>
-          <!-- <router-link tag="a" :to="`/project/${project.id}`"> -->
-          <a href="#">
-            <h4 v-on:click="showLoading(project.id)">{{ project.name }}</h4>
-          </a>
-          <!-- </router-link> -->
+          <router-link tag="a" :to="`/project/${project.id}`">
+            <h4>{{ project.name }}</h4>
+          </router-link>
         </b-card-body>
       </b-card>
       <b-card class="text-center" v-if="showError">
@@ -23,7 +25,7 @@
 <script>
 import axios from "axios";
 const api = axios.create({
-  baseURL: 'http://localhost:8080/api',
+  baseURL: 'http://localhost:4568/api/v2',
   headers: {
     'Content-Type': 'application/json',
     'X-Requested-With': 'XMLHttpRequest'
@@ -44,38 +46,30 @@ export default {
   },
   mounted() {
     this.$nextTick(function () {
-      const userInfo = this.$store.getters.getUser;
+      // const userInfo = this.$store.getters.getUser;
       api
-        .post("/v1", {
-          type: "get_projects",
-          id: userInfo.id
+        .get("/projects?token=" + this.$store.getters.getState.token, {
+          // token: this.$store.getters.getState.token
         })
         .then(response => {
           console.log(response);
-          const res = response.data;
-          if (res.response == "OK") {
-            this.projects = res.projects;
-          } else if (res.response == "Bad Request") {
-            console.log("Bad Request Reason: " + res.reason);
-            if (res.reason == "USER_NOT_FOUND") {
-              this.errorTitle = "ユーザー情報がありません";
-              this.errorMessage =
-                "サインインしていないため、プロジェクト一覧を表示できません。表示するにはサインインしてください。";
-              this.showError = true;
-            }
+          if (response.status == 200) {
+            this.projects = response.data.projects
           }
+          // const res = response.data;
+          // if (res.response == "OK") {
+          //   this.projects = res.projects;
+          // } else if (res.response == "Bad Request") {
+          //   console.log("Bad Request Reason: " + res.reason);
+          //   if (res.reason == "USER_NOT_FOUND") {
+          //     this.errorTitle = "ユーザー情報がありません";
+          //     this.errorMessage =
+          //       "サインインしていないため、プロジェクト一覧を表示できません。表示するにはサインインしてください。";
+          //     this.showError = true;
+          //   }
+          // }
         });
     });
-  },
-  methods: {
-    showLoading: function (id) {
-      this.$store.commit("setLoadingState", {
-        loadingState: {
-          isShow: true
-        }
-      })
-      this.$router.push("/project/" + id);
-    }
   }
 };
 </script>
