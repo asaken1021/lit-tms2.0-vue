@@ -24,15 +24,6 @@
 
 <script>
 import axios from "axios";
-const api = axios.create({
-  baseURL: 'http://localhost:4568/api/v2',
-  headers: {
-    'Content-Type': 'application/json',
-    'X-Requested-With': 'XMLHttpRequest'
-  },
-  responseType: 'json',
-  withCredentials: true
-});
 
 export default {
   name: "ProjectsList",
@@ -45,29 +36,56 @@ export default {
     };
   },
   mounted() {
+    const api = axios.create({
+      baseURL: 'http://localhost:4568/api/v2',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      responseType: 'json',
+      withCredentials: true
+    });
+
+    api.interceptors.response.use(response => response, async error => {
+      console.log("api interceptor before retry", api, error.config, error.response);
+      if (error.response.status == 401 && !error.config.isRetried) {
+        console.log("token refresh called");
+        await api.put("/session", {
+          refresh_token: this.$store.getters.getState.refresh_token
+        })
+          .then(response => {
+            console.log("api interceptor doing token refresh", response);
+
+            this.$store.commit("setState", {
+              state: {
+                name: response.data.name,
+                id: response.data.id,
+                token: response.data.token,
+                refresh_token: response.data.refresh_token
+              }
+            })
+          })
+        error.config.isRetried = true;
+
+        api.request(error.config);
+
+        console.log("api interceptor after token refresh")
+      }
+    })
+
     this.$nextTick(function () {
-      // const userInfo = this.$store.getters.getUser;
+      console.log("nextTick before get request")
       api
-        .get("/projects?token=" + this.$store.getters.getState.token, {
-          // token: this.$store.getters.getState.token
+        .get("/projects", {
+          params: {
+            token: this.$store.getters.getState.token
+          }
         })
         .then(response => {
-          console.log(response);
+          console.log("nextTick doing get project data", response);
           if (response.status == 200) {
             this.projects = response.data.projects
           }
-          // const res = response.data;
-          // if (res.response == "OK") {
-          //   this.projects = res.projects;
-          // } else if (res.response == "Bad Request") {
-          //   console.log("Bad Request Reason: " + res.reason);
-          //   if (res.reason == "USER_NOT_FOUND") {
-          //     this.errorTitle = "ユーザー情報がありません";
-          //     this.errorMessage =
-          //       "サインインしていないため、プロジェクト一覧を表示できません。表示するにはサインインしてください。";
-          //     this.showError = true;
-          //   }
-          // }
         });
     });
   }

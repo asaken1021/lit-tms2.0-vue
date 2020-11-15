@@ -7,7 +7,8 @@ const store = new Vuex.Store({
   state: {
     state: {
       name: "",
-      token: ""
+      token: "",
+      refresh_token: ""
     },
     selectedProject: {
       project_id: -1,

@@ -322,7 +322,8 @@ export default {
               state: {
                 name: response.data.name,
                 id: response.data.id,
-                token: response.data.token
+                token: response.data.token,
+                refresh_token: response.data.refresh_token
               }
             })
             this.$bvModal.hide("modal-sign_in")
