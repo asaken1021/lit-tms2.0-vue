@@ -278,6 +278,38 @@ export default {
     };
   },
   mounted() {
+    this.$nextTick(function () {
+      api.interceptors.response.use(response => { console.log("api interceptor response", response); return response }, async error => {
+        console.log("api interceptor before retry", api, error.config, error.response);
+        if (error.response.status == 401 && !error.config.isRetried) {
+          console.log("token refresh called");
+          await api.put("/session", {
+            refresh_token: this.$store.getters.getState.refresh_token
+          })
+            .then(response => {
+              console.log("api interceptor doing token refresh", response);
+
+              this.$store.commit("setState", {
+                state: {
+                  name: response.data.name,
+                  id: response.data.id,
+                  token: response.data.token,
+                  refresh_token: response.data.refresh_token
+                }
+              })
+            })
+          error.config.isRetried = true;
+          const data = JSON.parse(error.config.data);
+          data.token = this.$store.getters.getState.token;
+          error.config.data = data;
+
+          console.log("api interceptor after token refresh")
+
+          return api(error.config);
+        }
+      })
+    });
+
     this.$store.subscribe((mutation, state) => {
       if (mutation.type == "setSelectedTask") {
         this.modal_task.id = state.selectedTask.task_id;

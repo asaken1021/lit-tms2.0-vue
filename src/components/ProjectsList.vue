@@ -46,7 +46,7 @@ export default {
       withCredentials: true
     });
 
-    api.interceptors.response.use(response => response, async error => {
+    api.interceptors.response.use(response => { console.log("api interceptor response", response); return response }, async error => {
       console.log("api interceptor before retry", api, error.config, error.response);
       if (error.response.status == 401 && !error.config.isRetried) {
         console.log("token refresh called");
@@ -66,10 +66,13 @@ export default {
             })
           })
         error.config.isRetried = true;
-
-        api.request(error.config);
+        error.config.params = {
+          token: this.$store.getters.getState.token
+        };
 
         console.log("api interceptor after token refresh")
+
+        return api(error.config);
       }
     })
 
