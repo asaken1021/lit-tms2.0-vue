@@ -258,7 +258,7 @@
       <template v-slot:modal-footer>
         <b-button
           variant="secondary"
-          v-on:click="$bvModal.hide('modal-sign_in')"
+          v-on:click="$bvModal.hide('modal-line_sign_in')"
           >キャンセル</b-button
         >
         <b-button variant="primary" v-on:click="line_sign_in"
