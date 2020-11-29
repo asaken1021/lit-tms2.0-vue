@@ -502,7 +502,7 @@ export default {
         .post("/line_link", {
           mail: this.user.mail,
           password: this.user.password,
-          link_token: this.$route.param.link_token
+          link_token: this.$route.query.link_token
         })
         .then((response) => {
           console.log(response);
