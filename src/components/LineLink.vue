@@ -7,7 +7,7 @@
             LINEに通知を送信するには，LINEアカウントと連携する必要があります。連携するには，TMS
             2.0のアカウントでサインインしてください。
           </b-card-text>
-          <b-button variant="primary" v-b-modal.modal-sign_in>
+          <b-button variant="primary" v-b-modal.modal-line_sign_in>
             サインイン
           </b-button>
         </b-card-body>
