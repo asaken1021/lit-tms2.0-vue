@@ -242,6 +242,30 @@
         >
       </template>
     </b-modal>
+    <b-modal id="modal-line_sign_in" title="サインイン" size="lg" centered>
+      <b-form-input
+        v-model="user.mail"
+        type="email"
+        name="mail"
+        placeholder="メールアドレス"
+      />
+      <b-form-input
+        v-model="user.password"
+        type="password"
+        name="password"
+        placeholder="パスワード"
+      />
+      <template v-slot:modal-footer>
+        <b-button
+          variant="secondary"
+          v-on:click="$bvModal.hide('modal-sign_in')"
+          >キャンセル</b-button
+        >
+        <b-button variant="primary" v-on:click="line_sign_in"
+          >サインイン</b-button
+        >
+      </template>
+    </b-modal>
   </div>
 </template>
 
@@ -471,6 +495,20 @@ export default {
           // } else if (res.response == "Bad Request") {
           //   console.log("Bad Request Reason: " + res.reason);
           // }
+        });
+    },
+    line_sign_in: function () {
+      api
+        .post("/line_link", {
+          mail: this.user.mail,
+          password: this.user.password,
+          link_token: this.$route.param.link_token
+        })
+        .then((response) => {
+          console.log(response);
+          if (response.status == 200) {
+            window.location.href(response.data.line_url);
+          }
         });
     }
   }
