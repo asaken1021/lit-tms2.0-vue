@@ -507,7 +507,7 @@ export default {
         .then((response) => {
           console.log(response);
           if (response.status == 200) {
-            window.location.href(response.data.line_url);
+            window.location.href = response.data.line_url;
           }
         });
     }
