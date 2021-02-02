@@ -5,13 +5,18 @@
         <b-card-text>
           LINEに通知を送信する曜日と時間帯を設定します。
         </b-card-text>
-        <!-- modal -->
+        <b-button variant="primary" v-b-modal.modal-set_line_notify>
+          設定
+        </b-button>
+        <!-- まだ存在しないmodal -->
       </b-card>
       <b-card title="所属グループの設定" class="text-center">
         <b-card-text>
           グループに参加すると、所属するユーザーの進捗を確認できます。
         </b-card-text>
-        <!-- modal -->
+        <b-button variant="primary" v-b-modal.modal-set_groups>
+          所属グループ設定
+        </b-button>
       </b-card>
     </div>
   </div>
