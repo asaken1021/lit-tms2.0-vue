@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Main from '../views/Main.vue'
 import Projects from '../views/Projects.vue'
 import Project from '../views/Project.vue'
+import UserSettings from '../views/UserSettings.vue'
 import LineLink from '../views/LineLink.vue'
 import BootstrapVue from 'bootstrap-vue'
 import VueC3 from "vue-c3";
@@ -30,6 +31,11 @@ const routes = [
     path: '/project/:id',
     name: 'Project',
     component: Project
+  },
+  {
+    path: '/user_settings',
+    name: 'UserSettings',
+    component: UserSettings
   },
   {
     path: '/line_link',

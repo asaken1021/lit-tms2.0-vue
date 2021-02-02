@@ -389,15 +389,19 @@ export default {
     sign_out: function () {
       api
         .delete("/session", {
-
+          data: {
+            token: this.$store.getters.getState.token
+          }
         })
         .then((response) => {
           console.log(response);
-          if (response.status == 200 || response.status == 501) {
+          if (response.status == 200) {
             this.$store.commit("setState", {
               state: {
                 name: "",
-                token: ""
+                id: -1,
+                token: "",
+                refresh_token: ""
               }
             })
             this.$bvModal.hide("modal-sign_out");
